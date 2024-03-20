@@ -12,7 +12,7 @@
 ## Configuration and Practicing
 ### Localstack
 - Change `.env` with [localstack Configuration](https://docs.localstack.cloud/references/configuration/)
-- Add configuration `services > services > localstack > environment` of `docker-compose.yml`
+- Add configuration `services > localstack > environment` of `docker-compose.yml`
 
 ### AWS CLI configuration connect localstack
 #### Step 1: Config localstack: [aws-cli configuration](https://docs.localstack.cloud/user-guide/integrations/aws-cli/)
@@ -27,14 +27,16 @@ AWS_DEFAULT_REGION=ap-southeast-1
 #### Step 2: Config `aws` CLI
 ##### Change `~/.aws/config`
 ```
+[profile localstack]
 region=ap-southeast-1
 output=json
 endpoint_url=http://localhost:4566
 ```
 ##### Change `~/.aws/credentials`
 ```
-aws_access_key_id=test
-aws_secret_access_key=test
+[localstack]
+aws_access_key_id=<your-key-id-at-env>
+aws_secret_access_key=<your-access_key-at-env>
 ```
 ##### Or Run CMD `aws configure --profile localstack` and enter step.
 

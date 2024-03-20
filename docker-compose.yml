@@ -5,14 +5,22 @@ services:
     container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
     image: localstack/localstack
     ports:
-      - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+      - "4566:4566"            # LocalStack Gateway
+      - "4510-4559:4510-4559"  # external services port range
       - "8080:8080"
+      - "8000:8000"
+      - "22:22"
     environment:
       # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
       - DEBUG=${DEBUG:-0}
+      # - SERVICES=s3,sqs,lambda,dynamodb,apigateway,cloudformation,cloudwatch,ec2,sts,iam,sns,firehose,es,opensearch,events,logs,secretsmanager,stepfunctions,ssm,resource-groups,resourcegroupstaggingapi,acm,configservice,route53,route53resolver,s3control,eventscheduler,ses,support,swf,transcribe
+      - DEFAULT_REGION=us-east-1
+      - DATA_DIR=/tmp/localstack/data  # Tùy chọn để lưu dữ liệu
+      - LAMBDA_EXECUTOR=docker  # Sử dụng Docker cho các hàm Lambda
       - EAGER_SERVICE_LOADING=1 # running all services when start
-      - DATA_DIR=/tmp/localstack/data
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-LocalStackAccessKey}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-LocalStackSecretKey}
+      - AWS_DEFAULT_REGION=${AWS_SECRET_ACCESS_KEY:-us-east-1}
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"

@@ -1,7 +1,7 @@
 profile_config='localstack'
 key_name='ec2-keypair'
 security_group_name='default_security_group'
-image_id='ami-005fc0f236362e99f'
+image_id='ami-03fa85deedfcac80b'
 instance_type='t2.micro'
 
 ## create keypair
@@ -64,6 +64,6 @@ aws ec2 --profile ${profile_config} run-instances \
   --output table
 
 echo "Instance running:"
-aws ec2 --profile localstack describe-instances \
+aws ec2 --profile ${profile_config} describe-instances \
   --query 'Reservations[*].Instances[*].[InstanceId,InstanceType,State.Name,PublicIpAddress]' \
   --output table

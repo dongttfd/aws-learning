@@ -1,8 +1,4 @@
-profile_config='localstack'
-key_name='ec2-keypair'
-security_group_name='default_security_group'
-image_id='ami-03fa85deedfcac80b'
-instance_type='t2.micro'
+source ./config.sh
 
 ## create keypair
 aws ec2 --profile ${profile_config} delete-key-pair --key-name ${key_name}

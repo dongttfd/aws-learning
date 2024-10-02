@@ -1,9 +1,7 @@
-source ./config.sh
+source ./common/config.sh
+source ./helpers/ec2.helper.sh
 
-echo "Instance running:"
-aws ec2 --profile ${profile_config} describe-instances \
-  --query 'Reservations[*].Instances[*].[InstanceId,InstanceType,State.Name,PublicIpAddress]' \
-  --output table
+show_ec2_instances
 
 # Create AMI from running instance
 echo "Create AMI from running instance"
@@ -43,10 +41,7 @@ case $run_instance in
     --security-group-ids ${security_group_id} \
     --query 'Instances[0].[ImageId,InstanceType,State.Name,PublicIpAddress,SecurityGroups[0].GroupName]' \
     --output table
-  echo "Instance running:"
-  aws ec2 --profile ${profile_config} describe-instances \
-    --query 'Reservations[*].Instances[*].[InstanceId,InstanceType,State.Name,PublicIpAddress]' \
-    --output table
+  show_ec2_instances
   ;;
 0)
   echo "Exit"

@@ -1,4 +1,5 @@
-source ./config.sh
+source ./common/config.sh
+source ./helpers/ec2.helper.sh
 
 ## create keypair
 aws ec2 --profile ${profile_config} delete-key-pair --key-name ${key_name}
@@ -56,10 +57,9 @@ aws ec2 --profile ${profile_config} run-instances \
   --instance-type ${instance_type} \
   --key-name ${key_name} \
   --security-group-ids ${security_group_id} \
-  --query 'Instances[0].[ImageId,InstanceType,State.Name,PublicIpAddress,SecurityGroups[0].GroupName]' \
-  --output table
+  --placement "AvailabilityZone=${availability_zone}" \
+  --query 'Instances[0].[ImageId,InstanceType,State.Name,PublicIpAddress,SecurityGroups[0].GroupName,Placement.AvailabilityZone]' \
+  --output table \
+  --user-data file://./scripts/install.sh
 
-echo "Instance running:"
-aws ec2 --profile ${profile_config} describe-instances \
-  --query 'Reservations[*].Instances[*].[InstanceId,InstanceType,State.Name,PublicIpAddress]' \
-  --output table
+show_ec2_instances

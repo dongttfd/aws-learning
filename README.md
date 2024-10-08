@@ -16,36 +16,36 @@
 
 ### AWS CLI configuration connect localstack
 #### Step 1: Config localstack: [aws-cli configuration](https://docs.localstack.cloud/user-guide/integrations/aws-cli/)
-##### Solution 1: Change `environment` at `docker-compose.yml`
-```
-AWS_ACCESS_KEY_ID=test-key-id
-AWS_SECRET_ACCESS_KEY=test-access-key
-AWS_DEFAULT_REGION=ap-southeast-1
-```
-##### Solution 2: Config at Docker LocalStack Extension, add variables.
+- Solution 1: Change `environment` at `docker-compose.yml`
+  ```
+  AWS_ACCESS_KEY_ID=test-key-id
+  AWS_SECRET_ACCESS_KEY=test-access-key
+  AWS_DEFAULT_REGION=ap-southeast-1
+  ```
+- Solution 2: Config at Docker LocalStack Extension, add variables.
 
 #### Step 2: Config `aws` CLI
-##### Change `~/.aws/config`
-```
-[profile localstack]
-region=ap-southeast-1
-output=json
-endpoint_url=http://localhost:4566
-```
-##### Change `~/.aws/credentials`
-```
-[localstack]
-aws_access_key_id=<your-key-id-at-env>
-aws_secret_access_key=<your-access_key-at-env>
-```
-##### Or Run CMD `aws configure --profile localstack` and enter step.
+- Change `~/.aws/config`
+  ```
+  [profile localstack]
+  region=ap-southeast-1
+  output=json
+  endpoint_url=http://localhost:4566
+  ```
+- Change `~/.aws/credentials`
+  ```
+  [localstack]
+  aws_access_key_id=<your-key-id-at-env>
+  aws_secret_access_key=<your-access_key-at-env>
+  ```
+  `OR` Run CMD `aws configure --profile localstack` and enter step.
 
-##### Test 
-```
-aws s3 mb s3://test --profile localstack
-aws s3 ls --profile localstack
-```
-###### [LocalStack endpoints](https://docs.localstack.cloud/references/internal-endpoints/#localstack-endpoints)
+- Test 
+  ```
+  aws s3 mb s3://test --profile localstack
+  aws s3 ls --profile localstack
+  ```
+#### [LocalStack endpoints](https://docs.localstack.cloud/references/internal-endpoints/#localstack-endpoints)
 
 ## Document
 - [localstack](https://docs.localstack.cloud/overview/)

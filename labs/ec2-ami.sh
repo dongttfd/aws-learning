@@ -43,10 +43,6 @@ case $run_instance in
     --output table
   show_ec2_instances
   ;;
-0)
-  echo "Exit"
-  exit 0
-  ;;
 *)
   echo "Exit"
   exit 0

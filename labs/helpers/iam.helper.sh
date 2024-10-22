@@ -31,6 +31,13 @@ show_iam_users() {
     --output table
 }
 
+# Delete IAM User
+delete_iam_user() {
+  local user_name=$1
+  aws iam --profile ${profile_config} delete-user \
+    --user-name ${user_name}
+}
+
 # Show IAM Access Keys
 show_iam_access_keys() {
   local user_name=$1

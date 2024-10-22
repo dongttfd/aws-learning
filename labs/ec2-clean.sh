@@ -55,10 +55,6 @@ while true; do
     aws ec2 --profile ${profile_config} deregister-image --image-id $image_id
     echo "AMI deleted"
     ;;
-  0)
-    echo "Exit"
-    exit 0
-    ;;
   *)
     echo "Exit"
     exit 0

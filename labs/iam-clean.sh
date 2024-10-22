@@ -6,9 +6,7 @@ while true; do
   echo "Select IAM function:"
   echo "1: Delete IAM Group"
   echo "2: Delete IAM User"
-  echo "3: Delete IAM Policy"
-  echo "4: Delete IAM Role"
-  echo "5: Delete IAM Access Key"
+  echo "3: Delete IAM Access Key"
   echo "0: Exit"
   read selected_function
 
@@ -22,7 +20,16 @@ while true; do
     echo "Group deleted."
     show_iam_groups
     ;;
-  5)
+  2)
+    show_iam_users
+    echo "Delete IAM User"
+    echo "User name:"
+    read user_name
+    delete_iam_user $user_name
+    echo "User deleted."
+    show_iam_users
+    ;;
+  3)
     echo "Delete IAM Access Key:"
     show_iam_users
     echo "Enter user: "
@@ -33,10 +40,6 @@ while true; do
     delete_iam_access_key $access_key_id
     echo "Access Key deleted."
     show_iam_access_keys ${user_name}
-    ;;
-  0)
-    echo "Exit"
-    exit 0
     ;;
   *)
     echo "Exit"

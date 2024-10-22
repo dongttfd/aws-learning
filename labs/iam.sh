@@ -39,3 +39,7 @@ show_iam_access_keys ${iam_custome_user_name}
 
 echo "IAM configuration done."
 get_aws_configuration ${iam_custome_user_name}
+
+echo "\n====================================\n"
+echo "IAM identity: "
+aws sts --profile ${iam_custome_user_name} get-caller-identity

@@ -26,7 +26,7 @@ while true; do
     echo "Delete Security Group"
     echo "Security Group Name:"
     read security_group_name
-    aws ec2 --profile ${profile_config} delete-security-group --group-name $security_group_name
+    aws ec2 --profile $profile_config delete-security-group --group-name $security_group_name
     echo "Security Group deleted"
     show_ec2_security_groups
     ;;
@@ -36,23 +36,23 @@ while true; do
     echo "Delete Keypair"
     echo "Keypair Name:"
     read key_name
-    aws ec2 --profile ${profile_config} delete-key-pair --key-name $key_name
+    aws ec2 --profile $profile_config delete-key-pair --key-name $key_name
     echo "Keypair deleted"
     show_ec2_key_pairs
     ;;
   4)
-    aws ec2 --profile ${profile_config} describe-images \
-      --filters "Name=name,Values=${image_name_manual}" \
+    aws ec2 --profile $profile_config describe-images \
+      --filters "Name=name,Values=$image_name_manual" \
       --query 'Images[*].[ImageId,Name,CreationDate]' \
       --output table
     echo "Delete AMI"
     echo "AMI Name:"
     read image_name
-    image_id=$(aws ec2 --profile ${profile_config} describe-images \
-      --filters "Name=name,Values=${image_name}" \
+    image_id=$(aws ec2 --profile $profile_config describe-images \
+      --filters "Name=name,Values=$image_name" \
       --query 'Images[0].[ImageId]' \
       --output text)
-    aws ec2 --profile ${profile_config} deregister-image --image-id $image_id
+    aws ec2 --profile $profile_config deregister-image --image-id $image_id
     echo "AMI deleted"
     ;;
   *)

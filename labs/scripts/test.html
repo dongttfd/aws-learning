@@ -1,0 +1,12 @@
+
+echo '<html>' >> index.html
+echo '<body>' >> index.html
+echo '<h1 style="color: blue;">Welcome Server A</h1>' >> index.html
+echo '<h4 style="color: red;">You are run instance from this IP (for debug only!!! Do not public this to User)</h4>' >> index.html
+export TOKEN = `curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
+echo '<br />Private IP:' >> index.html
+curl -H "X-aws-ec2-metadata-token: $TOKEN" -v "http://169.254.169.254/latest/metadata/local-ipv4" >> index.html
+echo '<br />Public IP:' >> index.html
+curl -H "X-aws-ec2-metadata-token: $TOKEN" -v "http://169.254.169.254/latest/metadata/public-ipv4" >> index.html
+echo '</body>' >> index.html
+echo '</html>' >> index.html

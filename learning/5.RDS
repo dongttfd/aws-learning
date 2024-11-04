@@ -1,0 +1,8 @@
+# RDS (Relation Database Service)
+### Các mô hình triển khai
+- Single instance: chỉ có 1 Amazon RDS instance duy nhất trên 1 AZ (Availability Zone), sự cố zone là mất, phù hợp với môi trường cho DEV
+- Single instance + Multiple AZ: Nhiệm vụ của **instance standby** này là sync data từ AZ master, không thể truy cập vào nó. Sự cố xảy ra thì **instance standby** sẽ được đẩy lên làm master  => x2 số tiền thuê, phù hợp production
+- Master - Readonly User: Tạo ra 1 instance với mode Readonly, chỉ đọc được dữ liệu từ instance này, Tạo replica với master
+- Master - Readonly + Multiple AZ là kết hơp replica + Multiple AZ => đắt gấp 4 lần
+- Master - Multiple Read cluster: Nhiều readonly instance sẽ được tạo ra
+

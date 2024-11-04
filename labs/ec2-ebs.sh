@@ -4,8 +4,8 @@ source ./helpers/ec2.helper.sh
 # Create EBS volume
 create_ebs_volume() {
   echo "Create EBS volume:"
-  aws ec2 --profile ${profile_config} create-volume \
-    --availability-zone ${availability_zone} \
+  aws ec2 --profile $profile_config create-volume \
+    --availability-zone $availability_zone \
     --size 1 \
     --volume-type gp2 \
     --query 'VolumeId' \
@@ -19,7 +19,7 @@ attach_ebs_volume() {
   read volume_id
   echo "Instance ID:"
   read instance_id
-  aws ec2 --profile ${profile_config} attach-volume \
+  aws ec2 --profile $profile_config attach-volume \
     --volume-id $volume_id \
     --instance-id $instance_id \
     --device /dev/sdf \
@@ -31,7 +31,7 @@ detach_ebs_volume() {
   echo "Detacth Volume"
   echo "Volume ID:"
   read volume_id
-  aws ec2 --profile ${profile_config} detach-volume --volume-id $volume_id
+  aws ec2 --profile $profile_config detach-volume --volume-id $volume_id
   echo "Volume detacthed"
 }
 # Delete EBS volume
@@ -39,7 +39,7 @@ delete_ebs_volume() {
   echo "Delete EBS volume"
   echo "Volume ID:"
   read volume_id
-  aws ec2 --profile ${profile_config} delete-volume --volume-id $volume_id
+  aws ec2 --profile $profile_config delete-volume --volume-id $volume_id
   echo "Volume deleted"
 }
 

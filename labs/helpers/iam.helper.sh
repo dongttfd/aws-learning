@@ -11,7 +11,7 @@ show_iam_groups() {
 # Show IAM Policy Detail of Group
 show_iam_policy_detail_of_group() {
   aws iam --profile ${profile_config} list-attached-group-policies \
-    --group-name DeveloperGroup \
+    --group-name $iam_custome_group_name \
     --query="AttachedPolicies[*].[PolicyName,PolicyArn]" \
     --output table
 }
@@ -34,8 +34,35 @@ show_iam_users() {
 # Delete IAM User
 delete_iam_user() {
   local user_name=$1
+  # Remove all MFAs devices
+  aws iam --profile ${profile_config} list-mfa-devices \
+    --user-name ${user_name} \
+    --query="MFADevices[*].[SerialNumber]" \
+    --output text | while read serial_number; do
+    aws iam --profile ${profile_config} deactivate-mfa-device \
+      --user-name ${user_name} \
+      --serial-number ${serial_number}
+  done
+
+  # Delete user
   aws iam --profile ${profile_config} delete-user \
     --user-name ${user_name}
+}
+
+# Show IAM Policies
+show_manual_iam_policies() {
+  echo "Manual IAM Policies:"
+  aws iam --profile ${profile_config} list-policies \
+    --scope Local \
+    --query 'Policies[*].{Name:PolicyName, Arn:Arn}' \
+    --output table
+}
+
+# Delete IAM Policy
+delete_manual_iam_policy() {
+  local policy_arn=$1
+  aws iam --profile ${profile_config} delete-policy \
+    --policy-arn ${policy_arn}
 }
 
 # Show IAM Access Keys
@@ -50,7 +77,10 @@ show_iam_access_keys() {
 # Delete IAM Access Key
 delete_iam_access_key() {
   local access_key_id=$1
-  aws iam --profile ${profile_config} delete-access-key --access-key-id ${access_key_id}
+  local user_name=$1
+  aws iam --profile ${profile_config} delete-access-key \
+    --user-name user_name \
+    --access-key-id ${access_key_id}
 }
 
 # AWS config with new user of localstack
@@ -85,4 +115,61 @@ get_aws_configuration() {
   echo "secret_key: $(aws configure get secret_key --profile ${profile_name})"
   echo "region: $(aws configure get region --profile ${profile_name})"
   echo "endpoint_url: $(aws configure get endpoint_url --profile ${profile_name})"
+}
+
+# Attach MFA policy to group
+attach_mfa_policy_to_group() {
+  local policy_arn=$1
+  local group_name=$2
+  aws iam --profile $profile_config attach-group-policy \
+    --group-name $group_name \
+    --policy-arn $policy_arn
+
+  echo "Group $group_name policies:"
+  aws iam --profile $profile_config list-attached-group-policies \
+    --group-name $group_name \
+    --query="AttachedPolicies[*].[PolicyName,PolicyArn]" \
+    --output table
+}
+
+# Detach MFA policy from group
+detach_mfa_policy_from_group() {
+  local policy_arn=$1
+  local group_name=$2
+  aws iam --profile $profile_config detach-group-policy \
+    --group-name $group_name \
+    --policy-arn $policy_arn
+
+  echo "Group $group_name policies:"
+  aws iam --profile $profile_config list-attached-group-policies \
+    --group-name $group_name \
+    --query="AttachedPolicies[*].[PolicyName,PolicyArn]" \
+    --output table
+}
+
+# Show policies of group
+show_policies_of_group() {
+  local group_name=$1
+  aws iam --profile $profile_config list-attached-group-policies \
+    --group-name $group_name \
+    --query="AttachedPolicies[*].[PolicyName,PolicyArn]" \
+    --output table
+}
+
+# Show IAM Users from Group
+show_iam_users_from_group() {
+  local group_name=$1
+  aws iam --profile $profile_config get-group \
+    --group-name $group_name \
+    --query="Users[*].[UserId,UserName,Arn,Path]" \
+    --output table
+}
+
+# Remove User from Group
+remove_user_from_group() {
+  local user_name=$1
+  local group_name=$2
+  aws iam --profile $profile_config remove-user-from-group \
+    --user-name $user_name \
+    --group-name $group_name
 }
